@@ -1,8 +1,4 @@
 --[[
-	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hardgitcore/Yourtrollingme-/refs/heads/main/Cool%20looking%20rspy"))()
---[[
     WARNING: Heads up! This script uses direct function hooking.
     CENIROSO REMOTE SPY - V2.1 (Boutons TopBar & Mini-Bouton Déplaçable)
 ]]
