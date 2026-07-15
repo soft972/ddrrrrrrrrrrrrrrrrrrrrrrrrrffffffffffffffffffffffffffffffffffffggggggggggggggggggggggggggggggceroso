@@ -1,4 +1,8 @@
 --[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hardgitcore/Yourtrollingme-/refs/heads/main/Cool%20looking%20rspy"))()
+--[[
     WARNING: Heads up! This script uses direct function hooking.
     CENIROSO REMOTE SPY - V2.1 (Boutons TopBar & Mini-Bouton Déplaçable)
 ]]
@@ -123,13 +127,13 @@ ToggleButton.TextSize = 14
 ToggleButton.Visible = false
 ToggleButton.Active = true
 
-local LinkButton = Instance.new("ImageLabel")
-LinkButton.Name = "LinkButton"
-LinkButton.Parent = ToggleButton
-LinkButton.BackgroundTransparency = 0
-LinkButton.Position = UDim2.new(0, 0, 0, 0)
-LinkButton.Size = UDim2.new(0, 60, 0, 60) -- Taille adaptée à la TopBar
-LinkButton.Image = "rbxassetid://135799166376598"
+local ToggleImage = Instance.new("ImageLabel")
+ToggleImage.Name = "LinkButton"
+ToggleImage.Parent = ToggleButton
+ToggleImage.BackgroundTransparency = 0
+ToggleImage.Position = UDim2.new(0, 0, 0, 0)
+ToggleImage.Size = UDim2.new(0, 60, 0, 60) -- Taille adaptée à la TopBar
+ToggleImage.Image = "rbxassetid://135799166376598"
 
 local ToggleCorner = Instance.new("UICorner")
 ToggleCorner.CornerRadius = UDim.new(0, 16)
