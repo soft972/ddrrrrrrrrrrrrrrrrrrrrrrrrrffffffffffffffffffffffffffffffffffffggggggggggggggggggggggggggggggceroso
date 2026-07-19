@@ -1,42 +1,36 @@
-local url = "https://wikipedia-wish-unsheathe.ngrok-free.dev"
+local url = "https://wikipedia-wish-unsheathe.ngrok-free.dev/"
 
--- Récupération du contenu de la page
+-- Récupération du contenu depuis ton serveur Python
 local success, content = pcall(function()
     return game:HttpGet(url)
 end)
 
-if not success then
-    warn("Erreur de connexion : " .. tostring(content))
+if not success or not content then
+    warn("Delta : Impossible de charger l'URL.")
     return
 end
 
-local luaCode = nil
+-- 1. Nettoyage des sauts de ligne Windows (\r\n) pour éviter les bugs d'affichage dans Delta
+content = string.gsub(content, "\r", "")
 
--- Stratégie 1 : Si ton code Lua est dans une balise standard de texte brut (ex: <pre>...</pre>)
-luaCode = string.match(content, "<pre[^>]*>(.-)</pre>")
+-- 2. Filtre intelligent : On vire uniquement les vraies balises HTML (lettres après le <)
+-- Cela évite de casser les lignes Lua comme "if x < 5" ou "y > 10"
+local luaCode = string.gsub(content, "</?%a+[^>]*>", "")
 
--- Stratégie 2 : Si tu préfères mettre des marqueurs personnalisés dans ton serveur
--- Exemple dans ton code : --START_LUA-- ton code --END_LUA--
-if not luaCode then
-    luaCode = string.match(content, "%-%-START_LUA%-%-(.-)%-%-END_LUA%-%-")
-end
+-- 3. Nettoyage des espaces vides inutiles au début et à la fin
+luaCode = string.gsub(luaCode, "^%s*(.-)%s*$", "%1")
 
--- Si on a trouvé le code Lua isolé
-if luaCode then
-    -- Nettoyage des entités HTML courantes (si le serveur a transformé les < en &lt;)
-    luaCode = string.gsub(luaCode, "&lt;", "<")
-    luaCode = string.gsub(luaCode, "&gt;", ">")
-    luaCode = string.gsub(luaCode, "&amp;", "&")
-    luaCode = string.gsub(luaCode, '"', '"')
-
-    -- Exécution du script Lua purifié
+-- 4. Exécution du code Lua purifié
+if luaCode and #luaCode > 0 then
     local loadedScript, err = loadstring(luaCode)
     if loadedScript then
+        print("Delta : Code extrait et exécuté avec succès !")
         loadedScript()
     else
-        warn("Erreur de syntaxe dans le Lua extrait : " .. tostring(err))
+        warn("Erreur de syntaxe dans le Lua nettoyé : " .. tostring(err))
+        print("Aperçu du code envoyé à l'éditeur :")
+        print(string.sub(luaCode, 1, 500)) -- Permet de voir s'il reste des résidus dans la console F9
     end
 else
-    warn("Impossible de séparer le Lua du HTML. Les balises <pre> ou --START_LUA-- sont introuvables.")
-    print("Aperçu du bloc reçu : " .. string.sub(content, 1, 200))
+    warn("Delta n'a trouvé aucun code après le filtrage HTML.")
 end
